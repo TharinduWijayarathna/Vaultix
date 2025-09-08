@@ -13,20 +13,21 @@ class AccountCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 280,
-      padding: const EdgeInsets.all(20),
+      width: double.infinity,
+      height: 160,
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: _getCardColors(account.type),
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+        color: const Color(0xFFFFFFFF),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: const Color(0xFFE2E8F0),
+          width: 1,
         ),
-        borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: _getCardColors(account.type)[0].withOpacity(0.3),
-            blurRadius: 15,
-            offset: const Offset(0, 8),
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
           ),
         ],
       ),
@@ -39,62 +40,69 @@ class AccountCard extends StatelessWidget {
               Text(
                 account.name,
                 style: const TextStyle(
-                  color: Colors.white,
+                  color: Color(0xFF0F172A),
                   fontSize: 18,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: -0.025,
                 ),
               ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(12),
+                  color: _getAccountTypeColor(account.type).withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(
                   account.type.toUpperCase(),
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    color: _getAccountTypeColor(account.type),
                     fontSize: 10,
                     fontWeight: FontWeight.w600,
+                    letterSpacing: -0.025,
                   ),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
           const Text(
             'Balance',
             style: TextStyle(
-              color: Colors.white70,
+              color: Color(0xFF64748B),
               fontSize: 14,
+              fontWeight: FontWeight.w500,
+              letterSpacing: -0.025,
             ),
           ),
           const SizedBox(height: 4),
           Text(
             NumberFormat.currency(symbol: '\$').format(account.balance),
             style: const TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
+              color: Color(0xFF0F172A),
+              fontSize: 22,
+              fontWeight: FontWeight.w700,
+              letterSpacing: -0.025,
             ),
           ),
-          const Spacer(),
+          const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 '**** **** **** 1234',
-                style: TextStyle(
-                  color: Colors.white.withOpacity(0.7),
+                style: const TextStyle(
+                  color: Color(0xFF64748B),
                   fontSize: 12,
+                  fontWeight: FontWeight.w500,
                   letterSpacing: 1,
                 ),
               ),
               Text(
                 DateFormat('MM/yy').format(account.createdDate),
-                style: TextStyle(
-                  color: Colors.white.withOpacity(0.7),
+                style: const TextStyle(
+                  color: Color(0xFF64748B),
                   fontSize: 12,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ],
@@ -104,18 +112,18 @@ class AccountCard extends StatelessWidget {
     );
   }
 
-  List<Color> _getCardColors(String type) {
+  Color _getAccountTypeColor(String type) {
     switch (type.toLowerCase()) {
       case 'checking':
-        return [const Color(0xFF667eea), const Color(0xFF764ba2)];
+        return const Color(0xFF3B82F6);
       case 'savings':
-        return [const Color(0xFFf093fb), const Color(0xFFf5576c)];
+        return const Color(0xFF10B981);
       case 'credit':
-        return [const Color(0xFF4facfe), const Color(0xFF00f2fe)];
+        return const Color(0xFFF59E0B);
       case 'investment':
-        return [const Color(0xFF43e97b), const Color(0xFF38f9d7)];
+        return const Color(0xFF8B5CF6);
       default:
-        return [const Color(0xFF6C5CE7), const Color(0xFFA29BFE)];
+        return const Color(0xFF64748B);
     }
   }
 }

@@ -4,9 +4,9 @@ import 'package:intl/intl.dart';
 import '../providers/app_provider.dart';
 import '../models/account.dart';
 import '../models/transaction.dart';
-import '../components/ui/card.dart';
-import '../components/ui/button.dart';
-import '../components/ui/input.dart';
+import '../components/ui/card.dart' as ui;
+import '../components/ui/button.dart' as ui;
+import '../components/ui/input.dart' as ui;
 
 class SpendScreen extends StatefulWidget {
   const SpendScreen({super.key});
@@ -170,7 +170,7 @@ class _SpendScreenState extends State<SpendScreen> {
   }
 
   Widget _buildTransactionTypeSelector() {
-    return Card(
+    return ui.Card(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -242,7 +242,7 @@ class _SpendScreenState extends State<SpendScreen> {
   }
 
   Widget _buildAccountSelector(AppProvider provider) {
-    return Select<Account>(
+    return ui.Select(
       label: 'Select Account',
       value: _selectedAccount,
       hintText: 'Choose an account',
@@ -257,9 +257,9 @@ class _SpendScreenState extends State<SpendScreen> {
           ),
         );
       }).toList(),
-      onChanged: (Account? account) {
+      onChanged: (dynamic account) {
         setState(() {
-          _selectedAccount = account;
+          _selectedAccount = account as Account?;
         });
       },
       validator: (value) {

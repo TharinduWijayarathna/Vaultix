@@ -5,9 +5,9 @@ import '../providers/app_provider.dart';
 import '../models/account.dart';
 import '../widgets/account_card.dart';
 import '../widgets/transaction_list_item.dart';
-import '../components/ui/card.dart';
-import '../components/ui/button.dart';
-import '../components/ui/badge.dart';
+import '../components/ui/card.dart' as ui;
+import '../components/ui/button.dart' as ui;
+import '../components/ui/badge.dart' as ui;
 import 'add_account_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -33,6 +33,7 @@ class HomeScreen extends StatelessWidget {
                 _buildAppBar(context, provider),
                 _buildTotalBalanceCard(provider),
                 _buildAccountsSection(context, provider),
+                const SliverToBoxAdapter(child: SizedBox(height: 24)),
                 _buildRecentTransactionsSection(context, provider),
                 const SliverToBoxAdapter(child: SizedBox(height: 100)),
               ],
@@ -49,8 +50,10 @@ class HomeScreen extends StatelessWidget {
             ),
           );
         },
-        backgroundColor: const Color(0xFF6C5CE7),
-        child: const Icon(Icons.add, color: Colors.white),
+        backgroundColor: const Color(0xFF0F172A),
+        foregroundColor: const Color(0xFFFFFFFF),
+        elevation: 0,
+        child: const Icon(Icons.add, size: 24),
       ),
     );
   }
@@ -139,7 +142,7 @@ class HomeScreen extends StatelessWidget {
           final totalBalance = snapshot.data ?? 0.0;
           return Padding(
             padding: const EdgeInsets.all(16),
-            child: Card(
+            child: ui.Card(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -155,8 +158,8 @@ class HomeScreen extends StatelessWidget {
                           letterSpacing: -0.025,
                         ),
                       ),
-                      Badge(
-                        variant: BadgeVariant.secondary,
+                      ui.Badge(
+                        variant: ui.BadgeVariant.secondary,
                         child: Text('${provider.accounts.length} accounts'),
                       ),
                     ],
@@ -175,20 +178,36 @@ class HomeScreen extends StatelessWidget {
                   Row(
                     children: [
                       Expanded(
-                        child: _buildStatCard(
-                          'Income',
-                          provider.getTotalIncome(),
-                          Icons.trending_up,
-                          const Color(0xFF10B981),
+                        child: FutureBuilder<double>(
+                          future: provider.getTotalIncome(
+                            DateTime.now().subtract(const Duration(days: 30)),
+                            DateTime.now(),
+                          ),
+                          builder: (context, snapshot) {
+                            return _buildStatCard(
+                              'Income',
+                              snapshot.data ?? 0.0,
+                              Icons.trending_up,
+                              const Color(0xFF10B981),
+                            );
+                          },
                         ),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
-                        child: _buildStatCard(
-                          'Expenses',
-                          provider.getTotalExpenses(),
-                          Icons.trending_down,
-                          const Color(0xFFEF4444),
+                        child: FutureBuilder<double>(
+                          future: provider.getTotalExpenses(
+                            DateTime.now().subtract(const Duration(days: 30)),
+                            DateTime.now(),
+                          ),
+                          builder: (context, snapshot) {
+                            return _buildStatCard(
+                              'Expenses',
+                              snapshot.data ?? 0.0,
+                              Icons.trending_down,
+                              const Color(0xFFEF4444),
+                            );
+                          },
                         ),
                       ),
                     ],
@@ -269,9 +288,9 @@ class HomeScreen extends StatelessWidget {
                     letterSpacing: -0.025,
                   ),
                 ),
-                Button(
-                  variant: ButtonVariant.outline,
-                  size: ButtonSize.sm,
+                ui.Button(
+                  variant: ui.ButtonVariant.outline,
+                  size: ui.ButtonSize.sm,
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -287,61 +306,62 @@ class HomeScreen extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           if (provider.accounts.isEmpty)
-            Card(
-              child: Column(
-                children: [
-                  Icon(
-                    Icons.account_balance_wallet_outlined,
-                    size: 48,
-                    color: const Color(0xFF64748B),
-                  ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'No accounts yet',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xFF0F172A),
-                      letterSpacing: -0.025,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: ui.Card(
+                child: Column(
+                  children: [
+                    Icon(
+                      Icons.account_balance_wallet_outlined,
+                      size: 48,
+                      color: const Color(0xFF64748B),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'Add your first account to get started',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Color(0xFF64748B),
-                      letterSpacing: -0.025,
+                    const SizedBox(height: 16),
+                    const Text(
+                      'No accounts yet',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF0F172A),
+                        letterSpacing: -0.025,
+                      ),
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 24),
-                  Button(
-                    isFullWidth: true,
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const AddAccountScreen(),
-                        ),
-                      );
-                    },
-                    child: const Text('Create Account'),
-                  ),
-                ],
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Add your first account to get started',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Color(0xFF64748B),
+                        letterSpacing: -0.025,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 24),
+                    ui.Button(
+                      isFullWidth: true,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AddAccountScreen(),
+                          ),
+                        );
+                      },
+                      child: const Text('Create Account'),
+                    ),
+                  ],
+                ),
               ),
             )
           else
             SizedBox(
-              height: 200,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+              height: 180,
+              child: PageView.builder(
                 itemCount: provider.accounts.length,
                 itemBuilder: (context, index) {
                   final account = provider.accounts[index];
                   return Padding(
-                    padding: const EdgeInsets.only(right: 16),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: AccountCard(account: account),
                   );
                 },
@@ -364,78 +384,81 @@ class HomeScreen extends StatelessWidget {
             child: Text(
               'Recent Transactions',
               style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF2D3436),
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF0F172A),
+                letterSpacing: -0.025,
               ),
             ),
           ),
           const SizedBox(height: 16),
           if (recentTransactions.isEmpty)
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              padding: const EdgeInsets.all(32),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.grey[200]!),
-              ),
-              child: Column(
-                children: [
-                  Icon(
-                    Icons.receipt_long_outlined,
-                    size: 64,
-                    color: Colors.grey[400],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(32),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFFFFFF),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: const Color(0xFFE2E8F0),
+                    width: 1,
                   ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'No transactions yet',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.grey[600],
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Your recent transactions will appear here',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[500],
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    Icon(
+                      Icons.receipt_long_outlined,
+                      size: 48,
+                      color: const Color(0xFF64748B),
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
+                    const SizedBox(height: 16),
+                    const Text(
+                      'No transactions yet',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF0F172A),
+                        letterSpacing: -0.025,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Your recent transactions will appear here',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Color(0xFF64748B),
+                        letterSpacing: -0.025,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
               ),
             )
           else
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 10,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: ListView.separated(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
+            SizedBox(
+              height: 200,
+              child: ListView.builder(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 itemCount: recentTransactions.length,
-                separatorBuilder: (context, index) => Divider(
-                  height: 1,
-                  color: Colors.grey[100],
-                ),
                 itemBuilder: (context, index) {
                   final transaction = recentTransactions[index];
                   final account = provider.getAccountById(transaction.accountId);
-                  return TransactionListItem(
-                    transaction: transaction,
-                    accountName: account?.name ?? 'Unknown Account',
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: TransactionListItem(
+                      transaction: transaction,
+                      accountName: account?.name ?? 'Unknown Account',
+                    ),
                   );
                 },
               ),

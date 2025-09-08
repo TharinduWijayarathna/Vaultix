@@ -17,8 +17,23 @@ class TransactionListItem extends StatelessWidget {
     final isIncome = transaction.type == 'income';
     final isExpense = transaction.type == 'expense';
     
-    return Padding(
+    return Container(
       padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFFFFFF),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: const Color(0xFFE2E8F0),
+          width: 1,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
       child: Row(
         children: [
           Container(
@@ -44,15 +59,18 @@ class TransactionListItem extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF2D3436),
+                    color: Color(0xFF0F172A),
+                    letterSpacing: -0.025,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   '${transaction.category} • $accountName',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 14,
-                    color: Colors.grey[600],
+                    color: Color(0xFF64748B),
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: -0.025,
                   ),
                 ),
               ],
@@ -65,20 +83,23 @@ class TransactionListItem extends StatelessWidget {
                 '${isIncome ? '+' : isExpense ? '-' : ''}${NumberFormat.currency(symbol: '\$').format(transaction.amount)}',
                 style: TextStyle(
                   fontSize: 16,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   color: isIncome 
-                      ? const Color(0xFF00B894)
+                      ? const Color(0xFF10B981)
                       : isExpense 
-                          ? const Color(0xFFE17055)
-                          : const Color(0xFF6C5CE7),
+                          ? const Color(0xFFEF4444)
+                          : const Color(0xFF0F172A),
+                  letterSpacing: -0.025,
                 ),
               ),
               const SizedBox(height: 4),
               Text(
                 DateFormat('MMM d').format(transaction.date),
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 12,
-                  color: Colors.grey[500],
+                  color: Color(0xFF64748B),
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: -0.025,
                 ),
               ),
             ],
