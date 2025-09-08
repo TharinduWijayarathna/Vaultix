@@ -54,7 +54,7 @@ class _SpendScreenState extends State<SpendScreen> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: const Color(0xFF6C5CE7),
+        backgroundColor: const Color(0xFF0F172A),
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
@@ -63,7 +63,7 @@ class _SpendScreenState extends State<SpendScreen> {
           if (provider.isLoading) {
             return const Center(
               child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF6C5CE7)),
+                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0F172A)),
               ),
             );
           }
@@ -110,13 +110,13 @@ class _SpendScreenState extends State<SpendScreen> {
             Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: const Color(0xFF6C5CE7).withOpacity(0.1),
+                color: const Color(0xFF0F172A).withOpacity(0.1),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Icon(
                 Icons.account_balance_wallet_outlined,
                 size: 80,
-                color: const Color(0xFF6C5CE7),
+                color: const Color(0xFF0F172A),
               ),
             ),
             const SizedBox(height: 32),
@@ -147,7 +147,7 @@ class _SpendScreenState extends State<SpendScreen> {
                   Navigator.pushNamed(context, '/add-account');
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF6C5CE7),
+                  backgroundColor: const Color(0xFF0F172A),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
@@ -280,7 +280,7 @@ class _SpendScreenState extends State<SpendScreen> {
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF2D3436),
+            color: Color(0xFF0F172A),
           ),
         ),
         const SizedBox(height: 16),
@@ -333,7 +333,7 @@ class _SpendScreenState extends State<SpendScreen> {
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF2D3436),
+            color: Color(0xFF0F172A),
           ),
         ),
         const SizedBox(height: 16),
@@ -381,7 +381,7 @@ class _SpendScreenState extends State<SpendScreen> {
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF2D3436),
+            color: Color(0xFF0F172A),
           ),
         ),
         const SizedBox(height: 16),
@@ -419,8 +419,8 @@ class _SpendScreenState extends State<SpendScreen> {
         onPressed: _processTransaction,
         style: ElevatedButton.styleFrom(
           backgroundColor: _transactionType == 'expense' 
-              ? const Color(0xFFE17055) 
-              : const Color(0xFF00B894),
+              ? const Color(0xFFEF4444) 
+              : const Color(0xFF10B981),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
@@ -461,8 +461,8 @@ class _SpendScreenState extends State<SpendScreen> {
                 : 'Income added successfully!',
           ),
           backgroundColor: _transactionType == 'expense' 
-              ? const Color(0xFFE17055) 
-              : const Color(0xFF00B894),
+              ? const Color(0xFFEF4444) 
+              : const Color(0xFF10B981),
         ),
       );
       

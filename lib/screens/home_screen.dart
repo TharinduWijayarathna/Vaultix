@@ -23,7 +23,7 @@ class HomeScreen extends StatelessWidget {
             if (provider.isLoading) {
               return const Center(
                 child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF6C5CE7)),
+                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0F172A)),
                 ),
               );
             }

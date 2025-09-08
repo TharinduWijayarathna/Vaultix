@@ -42,7 +42,7 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: const Color(0xFF6C5CE7),
+        backgroundColor: const Color(0xFF0F172A),
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
@@ -76,7 +76,7 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF2D3436),
+            color: Color(0xFF0F172A),
           ),
         ),
         const SizedBox(height: 16),
@@ -100,7 +100,7 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
                   type.toUpperCase(),
                   style: TextStyle(
                     fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                    color: isSelected ? const Color(0xFF6C5CE7) : const Color(0xFF2D3436),
+                    color: isSelected ? const Color(0xFF0F172A) : const Color(0xFF0F172A),
                   ),
                 ),
                 subtitle: Text(_getAccountTypeDescription(type)),
@@ -109,19 +109,19 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
                   height: 40,
                   decoration: BoxDecoration(
                     color: isSelected 
-                        ? const Color(0xFF6C5CE7).withOpacity(0.1)
+                        ? const Color(0xFF0F172A).withOpacity(0.1)
                         : Colors.grey[100],
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Icon(
                     _getAccountTypeIcon(type),
-                    color: isSelected ? const Color(0xFF6C5CE7) : Colors.grey[600],
+                    color: isSelected ? const Color(0xFF0F172A) : const Color(0xFF64748B),
                   ),
                 ),
                 trailing: isSelected
                     ? const Icon(
                         Icons.check_circle,
-                        color: Color(0xFF6C5CE7),
+                        color: Color(0xFF0F172A),
                       )
                     : null,
                 onTap: () {
@@ -146,7 +146,7 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF2D3436),
+            color: Color(0xFF0F172A),
           ),
         ),
         const SizedBox(height: 16),
@@ -190,7 +190,7 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF2D3436),
+            color: Color(0xFF0F172A),
           ),
         ),
         const SizedBox(height: 16),
@@ -238,7 +238,7 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
       child: ElevatedButton(
         onPressed: _saveAccount,
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF6C5CE7),
+          backgroundColor: const Color(0xFF0F172A),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
@@ -270,7 +270,7 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Account created successfully!'),
-          backgroundColor: Color(0xFF00B894),
+          backgroundColor: Color(0xFF10B981),
         ),
       );
       

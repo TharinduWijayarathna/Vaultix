@@ -29,7 +29,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: const Color(0xFF6C5CE7),
+        backgroundColor: const Color(0xFF0F172A),
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
@@ -38,7 +38,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
           if (provider.isLoading) {
             return const Center(
               child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF6C5CE7)),
+                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0F172A)),
               ),
             );
           }
@@ -88,7 +88,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF2D3436),
+              color: Color(0xFF0F172A),
             ),
           ),
           const SizedBox(height: 16),
@@ -106,7 +106,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                     margin: const EdgeInsets.symmetric(horizontal: 4),
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     decoration: BoxDecoration(
-                      color: isSelected ? const Color(0xFF6C5CE7) : Colors.grey[100],
+                      color: isSelected ? const Color(0xFF0F172A) : const Color(0xFFF1F5F9),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
@@ -142,7 +142,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
               child: _buildSummaryCard(
                 'Total Income',
                 data['income'] ?? 0.0,
-                const Color(0xFF00B894),
+                const Color(0xFF10B981),
                 Icons.trending_up,
               ),
             ),
@@ -151,7 +151,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
               child: _buildSummaryCard(
                 'Total Expenses',
                 data['expenses'] ?? 0.0,
-                const Color(0xFFE17055),
+                const Color(0xFFEF4444),
                 Icons.trending_down,
               ),
             ),
@@ -234,7 +234,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF2D3436),
+              color: Color(0xFF0F172A),
             ),
           ),
           const SizedBox(height: 20),
@@ -256,12 +256,12 @@ class _ReportsScreenState extends State<ReportsScreen> {
                       LineChartBarData(
                         spots: snapshot.data!,
                         isCurved: true,
-                        color: const Color(0xFF6C5CE7),
+                        color: const Color(0xFF0F172A),
                         barWidth: 3,
                         dotData: FlDotData(show: false),
                         belowBarData: BarAreaData(
                           show: true,
-                          color: const Color(0xFF6C5CE7).withOpacity(0.1),
+                          color: const Color(0xFF0F172A).withOpacity(0.1),
                         ),
                       ),
                     ],
@@ -297,7 +297,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF2D3436),
+              color: Color(0xFF0F172A),
             ),
           ),
           const SizedBox(height: 20),
@@ -347,7 +347,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF2D3436),
+              color: Color(0xFF0F172A),
             ),
           ),
           const SizedBox(height: 20),
@@ -443,7 +443,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
       const Color(0xFFFFEAA7),
       const Color(0xFFDDA0DD),
       const Color(0xFF98D8C8),
-      const Color(0xFFA29BFE),
+      const Color(0xFF64748B),
     ];
 
     final sections = <PieChartSectionData>[];
@@ -515,12 +515,12 @@ class _ReportsScreenState extends State<ReportsScreen> {
           barRods: [
             BarChartRodData(
               toY: income,
-              color: const Color(0xFF00B894),
+              color: const Color(0xFF10B981),
               width: 8,
             ),
             BarChartRodData(
               toY: expenses,
-              color: const Color(0xFFE17055),
+              color: const Color(0xFFEF4444),
               width: 8,
             ),
           ],

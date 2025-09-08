@@ -149,9 +149,9 @@ class TransactionListItem extends StatelessWidget {
       case 'utilities':
         return const Color(0xFF98D8C8);
       case 'income':
-        return const Color(0xFF6C5CE7);
+        return const Color(0xFF10B981);
       default:
-        return const Color(0xFFA29BFE);
+        return const Color(0xFF64748B);
     }
   }
 }

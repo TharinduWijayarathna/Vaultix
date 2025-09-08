@@ -24,7 +24,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: const Color(0xFF6C5CE7),
+        backgroundColor: const Color(0xFF0F172A),
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
         actions: [
@@ -41,7 +41,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
           if (provider.isLoading) {
             return const Center(
               child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF6C5CE7)),
+                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0F172A)),
               ),
             );
           }
@@ -76,14 +76,14 @@ class _BudgetScreenState extends State<BudgetScreen> {
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
               gradient: const LinearGradient(
-                colors: [Color(0xFF00B894), Color(0xFF00CEC9)],
+                colors: [Color(0xFF10B981), Color(0xFF059669)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFF00B894).withOpacity(0.3),
+                  color: const Color(0xFF10B981).withOpacity(0.3),
                   blurRadius: 15,
                   offset: const Offset(0, 8),
                 ),
@@ -106,14 +106,14 @@ class _BudgetScreenState extends State<BudgetScreen> {
           padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
             gradient: const LinearGradient(
-              colors: [Color(0xFF00B894), Color(0xFF00CEC9)],
+              colors: [Color(0xFF10B981), Color(0xFF059669)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF00B894).withOpacity(0.3),
+                color: const Color(0xFF10B981).withOpacity(0.3),
                 blurRadius: 15,
                 offset: const Offset(0, 8),
               ),
@@ -236,7 +236,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
             ),
             child: const Center(
               child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF6C5CE7)),
+                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0F172A)),
               ),
             ),
           );
@@ -265,12 +265,12 @@ class _BudgetScreenState extends State<BudgetScreen> {
             children: [
               const Row(
                 children: [
-                  Icon(Icons.account_balance_wallet, color: Color(0xFF6C5CE7), size: 28),
+                  Icon(Icons.account_balance_wallet, color: Color(0xFF0F172A), size: 28),
                   SizedBox(width: 12),
                   Text(
                     'Monthly Budget',
                     style: TextStyle(
-                      color: Color(0xFF2D3436),
+                      color: Color(0xFF0F172A),
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -295,7 +295,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                         Text(
                           NumberFormat.currency(symbol: '\$').format(budgetLimit),
                           style: const TextStyle(
-                            color: Color(0xFF2D3436),
+                            color: Color(0xFF0F172A),
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
                           ),
@@ -318,7 +318,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                         Text(
                           NumberFormat.currency(symbol: '\$').format(spent),
                           style: TextStyle(
-                            color: progress > 0.8 ? const Color(0xFFE17055) : const Color(0xFF6C5CE7),
+                            color: progress > 0.8 ? const Color(0xFFEF4444) : const Color(0xFF0F172A),
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
                           ),
@@ -333,14 +333,14 @@ class _BudgetScreenState extends State<BudgetScreen> {
                 value: progress.clamp(0.0, 1.0),
                 backgroundColor: Colors.grey[200],
                 valueColor: AlwaysStoppedAnimation<Color>(
-                  progress > 0.8 ? const Color(0xFFE17055) : const Color(0xFF6C5CE7),
+                  progress > 0.8 ? const Color(0xFFEF4444) : const Color(0xFF0F172A),
                 ),
               ),
               const SizedBox(height: 8),
               Text(
                 '${(progress * 100).toStringAsFixed(0)}% of budget used',
                 style: TextStyle(
-                  color: progress > 0.8 ? const Color(0xFFE17055) : Colors.grey,
+                  color: progress > 0.8 ? const Color(0xFFEF4444) : const Color(0xFF64748B),
                   fontSize: 12,
                   fontWeight: progress > 0.8 ? FontWeight.bold : FontWeight.normal,
                 ),
@@ -361,7 +361,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF2D3436),
+            color: Color(0xFF0F172A),
           ),
         ),
         const SizedBox(height: 16),
@@ -444,7 +444,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF2D3436),
+                  color: Color(0xFF0F172A),
                 ),
               ),
               Text(
@@ -452,7 +452,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
-                  color: progress > 0.8 ? const Color(0xFFE17055) : const Color(0xFF00B894),
+                  color: progress > 0.8 ? const Color(0xFFEF4444) : const Color(0xFF10B981),
                 ),
               ),
             ],
@@ -482,7 +482,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
             value: progress,
             backgroundColor: Colors.grey[200],
             valueColor: AlwaysStoppedAnimation<Color>(
-              progress > 0.8 ? const Color(0xFFE17055) : const Color(0xFF6C5CE7),
+              progress > 0.8 ? const Color(0xFFEF4444) : const Color(0xFF0F172A),
             ),
           ),
         ],
@@ -516,7 +516,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF2D3436),
+                  color: Color(0xFF0F172A),
                 ),
               ),
             ],
@@ -542,7 +542,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
             height: 6,
             margin: const EdgeInsets.only(top: 6),
             decoration: const BoxDecoration(
-              color: Color(0xFF6C5CE7),
+              color: Color(0xFF0F172A),
               shape: BoxShape.circle,
             ),
           ),
