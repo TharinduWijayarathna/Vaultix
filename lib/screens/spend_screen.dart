@@ -173,9 +173,10 @@ class _SpendScreenState extends State<SpendScreen> {
         const Text(
           'Transaction Type',
           style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF2D3436),
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: Color(0xFF0F172A),
+            letterSpacing: -0.025,
           ),
         ),
         const SizedBox(height: 16),
@@ -205,26 +206,28 @@ class _SpendScreenState extends State<SpendScreen> {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF6C5CE7) : Colors.white,
-          borderRadius: BorderRadius.circular(16),
+          color: isSelected ? const Color(0xFF0F172A) : const Color(0xFFFFFFFF),
+          borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: isSelected ? const Color(0xFF6C5CE7) : Colors.grey[300]!,
-            width: 2,
+            color: isSelected ? const Color(0xFF0F172A) : const Color(0xFFE2E8F0),
+            width: 1,
           ),
         ),
         child: Column(
           children: [
             Icon(
               icon,
-              color: isSelected ? Colors.white : Colors.grey[600],
-              size: 32,
+              color: isSelected ? const Color(0xFFFFFFFF) : const Color(0xFF64748B),
+              size: 24,
             ),
             const SizedBox(height: 8),
             Text(
               label,
               style: TextStyle(
-                color: isSelected ? Colors.white : Colors.grey[600],
-                fontWeight: FontWeight.bold,
+                color: isSelected ? const Color(0xFFFFFFFF) : const Color(0xFF64748B),
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                letterSpacing: -0.025,
               ),
             ),
           ],
@@ -240,23 +243,23 @@ class _SpendScreenState extends State<SpendScreen> {
         const Text(
           'Select Account',
           style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF2D3436),
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: Color(0xFF0F172A),
+            letterSpacing: -0.025,
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 12),
         Container(
           decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                blurRadius: 10,
-                offset: const Offset(0, 2),
-              ),
-            ],
+            color: const Color(0xFFFFFFFF),
+            borderRadius: BorderRadius.circular(8),
+            border: const Border(
+              top: BorderSide(color: Color(0xFFE2E8F0)),
+              left: BorderSide(color: Color(0xFFE2E8F0)),
+              right: BorderSide(color: Color(0xFFE2E8F0)),
+              bottom: BorderSide(color: Color(0xFFE2E8F0)),
+            ),
           ),
           child: DropdownButtonFormField<Account>(
             value: _selectedAccount,

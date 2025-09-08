@@ -42,15 +42,14 @@ class _MainScreenState extends State<MainScreen> {
         child: _screens[_currentIndex],
       ),
       bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 10,
-              offset: const Offset(0, -2),
+        decoration: const BoxDecoration(
+          color: Color(0xFFFFFFFF),
+          border: Border(
+            top: BorderSide(
+              color: Color(0xFFE2E8F0),
+              width: 1,
             ),
-          ],
+          ),
         ),
         child: SafeArea(
           child: Padding(
@@ -58,10 +57,10 @@ class _MainScreenState extends State<MainScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildNavItem(0, Icons.home_rounded, 'Home'),
-                _buildNavItem(1, Icons.payment_rounded, 'Spend'),
-                _buildNavItem(2, Icons.analytics_rounded, 'Reports'),
-                _buildNavItem(3, Icons.savings_rounded, 'Budget'),
+                _buildNavItem(0, Icons.home_outlined, Icons.home, 'Home'),
+                _buildNavItem(1, Icons.payment_outlined, Icons.payment, 'Spend'),
+                _buildNavItem(2, Icons.analytics_outlined, Icons.analytics, 'Reports'),
+                _buildNavItem(3, Icons.savings_outlined, Icons.savings, 'Budget'),
               ],
             ),
           ),
@@ -70,7 +69,7 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  Widget _buildNavItem(int index, IconData icon, String label) {
+  Widget _buildNavItem(int index, IconData icon, IconData activeIcon, String label) {
     final isSelected = _currentIndex == index;
     
     return GestureDetector(
@@ -80,26 +79,27 @@ class _MainScreenState extends State<MainScreen> {
         });
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF6C5CE7).withOpacity(0.1) : Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
+          color: isSelected ? const Color(0xFFF1F5F9) : Colors.transparent,
+          borderRadius: BorderRadius.circular(8),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
-              icon,
-              color: isSelected ? const Color(0xFF6C5CE7) : Colors.grey[600],
-              size: 24,
+              isSelected ? activeIcon : icon,
+              color: isSelected ? const Color(0xFF0F172A) : const Color(0xFF64748B),
+              size: 20,
             ),
             const SizedBox(height: 4),
             Text(
               label,
               style: TextStyle(
-                color: isSelected ? const Color(0xFF6C5CE7) : Colors.grey[600],
-                fontSize: 12,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                color: isSelected ? const Color(0xFF0F172A) : const Color(0xFF64748B),
+                fontSize: 11,
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                letterSpacing: -0.025,
               ),
             ),
           ],

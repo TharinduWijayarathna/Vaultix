@@ -5,6 +5,9 @@ import '../providers/app_provider.dart';
 import '../models/account.dart';
 import '../widgets/account_card.dart';
 import '../widgets/transaction_list_item.dart';
+import '../components/ui/card.dart';
+import '../components/ui/button.dart';
+import '../components/ui/badge.dart';
 import 'add_account_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -54,23 +57,26 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildAppBar(BuildContext context, AppProvider provider) {
     return SliverAppBar(
-      expandedHeight: 120,
+      expandedHeight: 100,
       floating: false,
       pinned: true,
-      backgroundColor: const Color(0xFF6C5CE7),
+      backgroundColor: const Color(0xFFFFFFFF),
       elevation: 0,
+      surfaceTintColor: Colors.transparent,
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
           decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [Color(0xFF6C5CE7), Color(0xFFA29BFE)],
+            color: Color(0xFFFFFFFF),
+            border: Border(
+              bottom: BorderSide(
+                color: Color(0xFFE2E8F0),
+                width: 1,
+              ),
             ),
           ),
           child: SafeArea(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -84,19 +90,20 @@ class HomeScreen extends StatelessWidget {
                           const Text(
                             'Vaultix',
                             style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 28,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 1.2,
+                              color: Color(0xFF0F172A),
+                              fontSize: 24,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: -0.025,
                             ),
                           ),
-                          const SizedBox(height: 4),
+                          const SizedBox(height: 2),
                           Text(
                             DateFormat('EEEE, MMMM d').format(DateTime.now()),
                             style: const TextStyle(
-                              color: Colors.white70,
-                              fontSize: 16,
+                              color: Color(0xFF64748B),
+                              fontSize: 14,
                               fontWeight: FontWeight.w400,
+                              letterSpacing: -0.025,
                             ),
                           ),
                         ],
@@ -104,13 +111,13 @@ class HomeScreen extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(12),
+                          color: const Color(0xFFF1F5F9),
+                          borderRadius: BorderRadius.circular(8),
                         ),
                         child: const Icon(
                           Icons.notifications_outlined,
-                          color: Colors.white,
-                          size: 24,
+                          color: Color(0xFF64748B),
+                          size: 20,
                         ),
                       ),
                     ],
@@ -130,52 +137,64 @@ class HomeScreen extends StatelessWidget {
         future: provider.getTotalBalance(),
         builder: (context, snapshot) {
           final totalBalance = snapshot.data ?? 0.0;
-          return Container(
-            margin: const EdgeInsets.all(16),
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFF6C5CE7), Color(0xFFA29BFE)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+          return Padding(
+            padding: const EdgeInsets.all(16),
+            child: Card(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Total Balance',
+                        style: TextStyle(
+                          color: Color(0xFF64748B),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: -0.025,
+                        ),
+                      ),
+                      Badge(
+                        variant: BadgeVariant.secondary,
+                        child: Text('${provider.accounts.length} accounts'),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    NumberFormat.currency(symbol: '\$').format(totalBalance),
+                    style: const TextStyle(
+                      color: Color(0xFF0F172A),
+                      fontSize: 32,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: -0.025,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _buildStatCard(
+                          'Income',
+                          provider.getTotalIncome(),
+                          Icons.trending_up,
+                          const Color(0xFF10B981),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: _buildStatCard(
+                          'Expenses',
+                          provider.getTotalExpenses(),
+                          Icons.trending_down,
+                          const Color(0xFFEF4444),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFF6C5CE7).withOpacity(0.3),
-                  blurRadius: 15,
-                  offset: const Offset(0, 8),
-                ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Total Balance',
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 16,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  NumberFormat.currency(symbol: '\$').format(totalBalance),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    _buildBalanceInfo('Accounts', provider.accounts.length),
-                    const SizedBox(width: 24),
-                    _buildBalanceInfo('Transactions', provider.transactions.length),
-                  ],
-                ),
-              ],
             ),
           );
         },
@@ -183,26 +202,51 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBalanceInfo(String label, int count) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          count.toString(),
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
+  Widget _buildStatCard(String label, double amount, IconData icon, Color color) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.05),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: color.withOpacity(0.2),
+          width: 1,
         ),
-        Text(
-          label,
-          style: const TextStyle(
-            color: Colors.white70,
-            fontSize: 12,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                icon,
+                color: color,
+                size: 16,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                label,
+                style: TextStyle(
+                  color: color,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: -0.025,
+                ),
+              ),
+            ],
           ),
-        ),
-      ],
+          const SizedBox(height: 8),
+          Text(
+            NumberFormat.currency(symbol: '\$').format(amount),
+            style: const TextStyle(
+              color: Color(0xFF0F172A),
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              letterSpacing: -0.025,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -219,12 +263,15 @@ class HomeScreen extends StatelessWidget {
                 const Text(
                   'My Accounts',
                   style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF2D3436),
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF0F172A),
+                    letterSpacing: -0.025,
                   ),
                 ),
-                TextButton(
+                Button(
+                  variant: ButtonVariant.outline,
+                  size: ButtonSize.sm,
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -233,51 +280,53 @@ class HomeScreen extends StatelessWidget {
                       ),
                     );
                   },
-                  child: const Text(
-                    'Add Account',
-                    style: TextStyle(
-                      color: Color(0xFF6C5CE7),
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+                  child: const Text('Add Account'),
                 ),
               ],
             ),
           ),
           const SizedBox(height: 16),
           if (provider.accounts.isEmpty)
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              padding: const EdgeInsets.all(32),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.grey[200]!),
-              ),
+            Card(
               child: Column(
                 children: [
                   Icon(
                     Icons.account_balance_wallet_outlined,
-                    size: 64,
-                    color: Colors.grey[400],
+                    size: 48,
+                    color: const Color(0xFF64748B),
                   ),
                   const SizedBox(height: 16),
-                  Text(
+                  const Text(
                     'No accounts yet',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
-                      color: Colors.grey[600],
+                      color: Color(0xFF0F172A),
+                      letterSpacing: -0.025,
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Text(
+                  const Text(
                     'Add your first account to get started',
                     style: TextStyle(
                       fontSize: 14,
-                      color: Colors.grey[500],
+                      color: Color(0xFF64748B),
+                      letterSpacing: -0.025,
                     ),
                     textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 24),
+                  Button(
+                    isFullWidth: true,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const AddAccountScreen(),
+                        ),
+                      );
+                    },
+                    child: const Text('Create Account'),
                   ),
                 ],
               ),
