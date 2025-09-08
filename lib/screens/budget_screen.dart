@@ -258,7 +258,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          NumberFormat.currency(symbol: '\$').format(budgetLimit),
+                          Provider.of<CurrencyProvider>(context, listen: false).formatAmount(budgetLimit),
                           style: const TextStyle(
                             color: Color(0xFF0F172A),
                             fontSize: 24,
@@ -281,7 +281,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          NumberFormat.currency(symbol: '\$').format(spent),
+                          Provider.of<CurrencyProvider>(context, listen: false).formatAmount(spent),
                           style: TextStyle(
                             color: progress > 0.8 ? const Color(0xFFEF4444) : const Color(0xFF0F172A),
                             fontSize: 24,
@@ -427,14 +427,14 @@ class _BudgetScreenState extends State<BudgetScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Spent: ${NumberFormat.currency(symbol: '\$').format(spent)}',
+                'Spent: ${Provider.of<CurrencyProvider>(context, listen: false).formatAmount(spent)}',
                 style: const TextStyle(
                   fontSize: 14,
                   color: Colors.grey,
                 ),
               ),
               Text(
-                'Limit: ${NumberFormat.currency(symbol: '\$').format(budget.limitAmount)}',
+                'Limit: ${Provider.of<CurrencyProvider>(context, listen: false).formatAmount(budget.limitAmount)}',
                 style: const TextStyle(
                   fontSize: 14,
                   color: Colors.grey,

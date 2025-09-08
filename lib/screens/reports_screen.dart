@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 import '../providers/app_provider.dart';
+import '../providers/currency_provider.dart';
 
 class ReportsScreen extends StatefulWidget {
   const ReportsScreen({super.key});
@@ -190,7 +191,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
               ),
               const Spacer(),
               Text(
-                NumberFormat.currency(symbol: '\$').format(amount),
+                Provider.of<CurrencyProvider>(context, listen: false).formatAmount(amount),
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -385,7 +386,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                           showTitles: true,
                           getTitlesWidget: (value, meta) {
                             return Text(
-                              '\$${value.toInt()}',
+                              '${Provider.of<CurrencyProvider>(context, listen: false).currencySymbol}${value.toInt()}',
                               style: const TextStyle(fontSize: 12),
                             );
                           },

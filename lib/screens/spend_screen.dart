@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../providers/app_provider.dart';
+import '../providers/currency_provider.dart';
 import '../models/account.dart';
 import '../models/transaction.dart';
 import '../components/ui/card.dart' as ui;
@@ -250,7 +251,7 @@ class _SpendScreenState extends State<SpendScreen> {
         return DropdownMenuItem<Account>(
           value: account,
           child: Text(
-            '${account.name} (${NumberFormat.currency(symbol: '\$').format(account.balance)})',
+            '${account.name} (${Provider.of<CurrencyProvider>(context, listen: false).formatAmount(account.balance)})',
             style: const TextStyle(
               fontWeight: FontWeight.w500,
             ),
@@ -299,11 +300,11 @@ class _SpendScreenState extends State<SpendScreen> {
           child: TextFormField(
             controller: _amountController,
             keyboardType: TextInputType.number,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               hintText: '0.00',
-              prefixText: '\$ ',
+              prefixText: '${Provider.of<CurrencyProvider>(context, listen: false).currencySymbol} ',
               border: InputBorder.none,
-              contentPadding: EdgeInsets.all(20),
+              contentPadding: const EdgeInsets.all(20),
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {

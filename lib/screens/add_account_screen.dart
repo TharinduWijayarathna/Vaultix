@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/app_provider.dart';
+import '../providers/currency_provider.dart';
 import '../models/account.dart';
 
 class AddAccountScreen extends StatefulWidget {
@@ -209,11 +210,11 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
           child: TextFormField(
             controller: _balanceController,
             keyboardType: TextInputType.number,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               hintText: '0.00',
-              prefixText: '\$ ',
+              prefixText: '${Provider.of<CurrencyProvider>(context, listen: false).currencySymbol} ',
               border: InputBorder.none,
-              contentPadding: EdgeInsets.all(20),
+              contentPadding: const EdgeInsets.all(20),
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
