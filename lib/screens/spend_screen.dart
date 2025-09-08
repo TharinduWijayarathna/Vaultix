@@ -69,10 +69,10 @@ class _SpendScreenState extends State<SpendScreen> {
             return _buildEmptyState();
           }
 
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
-            child: Form(
-              key: _formKey,
+          return Form(
+            key: _formKey,
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -87,6 +87,7 @@ class _SpendScreenState extends State<SpendScreen> {
                   _buildDescriptionField(),
                   const SizedBox(height: 32),
                   _buildProcessButton(),
+                  const SizedBox(height: 100), // Extra space for bottom navigation
                 ],
               ),
             ),
@@ -267,42 +268,11 @@ class _SpendScreenState extends State<SpendScreen> {
             items: provider.accounts.map((account) {
               return DropdownMenuItem<Account>(
                 value: account,
-                child: Row(
-                  children: [
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF6C5CE7).withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: const Icon(
-                        Icons.account_balance,
-                        color: Color(0xFF6C5CE7),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            account.name,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            '${account.type.toUpperCase()} • ${NumberFormat.currency(symbol: '\$').format(account.balance)}',
-                            style: TextStyle(
-                              color: Colors.grey[600],
-                              fontSize: 12,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                child: Text(
+                  '${account.name} (${NumberFormat.currency(symbol: '\$').format(account.balance)})',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               );
             }).toList(),

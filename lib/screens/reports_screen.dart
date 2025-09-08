@@ -57,6 +57,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                 _buildCategoryBreakdown(provider),
                 const SizedBox(height: 24),
                 _buildIncomeVsExpense(provider),
+                const SizedBox(height: 100), // Extra space for bottom navigation
               ],
             ),
           );

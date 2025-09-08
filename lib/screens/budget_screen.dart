@@ -58,6 +58,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                 _buildBudgetList(provider),
                 const SizedBox(height: 24),
                 _buildTipsCard(),
+                const SizedBox(height: 100), // Extra space for bottom navigation
               ],
             ),
           );
