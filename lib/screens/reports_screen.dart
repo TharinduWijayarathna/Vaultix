@@ -415,57 +415,110 @@ class _ReportsScreenState extends State<ReportsScreen> {
   }
 
   Future<List<FlSpot>> _getExpenseChartData(AppProvider provider) async {
-    // Generate sample data for the chart
+    final dateRange = _getDateRange();
     final spots = <FlSpot>[];
-    for (int i = 0; i < 7; i++) {
-      spots.add(FlSpot(i.toDouble(), (i + 1) * 100 + (i * 50)));
+    
+    // Get daily expense data for the last 7 days
+    for (int i = 6; i >= 0; i--) {
+      final date = DateTime.now().subtract(Duration(days: i));
+      final startOfDay = DateTime(date.year, date.month, date.day);
+      final endOfDay = startOfDay.add(const Duration(days: 1));
+      
+      final expenses = await provider.getTotalExpenses(startOfDay, endOfDay);
+      spots.add(FlSpot((6 - i).toDouble(), expenses));
     }
+    
     return spots;
   }
 
   Future<List<PieChartSectionData>> _getCategoryChartData(AppProvider provider) async {
-    final categories = ['Food & Dining', 'Transportation', 'Entertainment', 'Shopping', 'Other'];
+    final dateRange = _getDateRange();
+    final categories = ['Food & Dining', 'Transportation', 'Entertainment', 'Shopping', 'Healthcare', 'Education', 'Utilities', 'Other'];
     final colors = [
       const Color(0xFFFF6B6B),
       const Color(0xFF4ECDC4),
       const Color(0xFF45B7D1),
       const Color(0xFF96CEB4),
+      const Color(0xFFFFEAA7),
+      const Color(0xFFDDA0DD),
+      const Color(0xFF98D8C8),
       const Color(0xFFA29BFE),
     ];
 
     final sections = <PieChartSectionData>[];
-    for (int i = 0; i < categories.length; i++) {
+    double totalExpenses = 0;
+    
+    // Calculate total expenses for the period
+    for (String category in categories) {
+      final categoryExpenses = await provider.getTotalExpensesByCategory(category, dateRange['start']!, dateRange['end']!);
+      totalExpenses += categoryExpenses;
+    }
+    
+    if (totalExpenses == 0) {
+      // Show empty state
       sections.add(
         PieChartSectionData(
-          color: colors[i],
-          value: (i + 1) * 10,
-          title: '${(i + 1) * 10}%',
+          color: Colors.grey[300]!,
+          value: 100,
+          title: 'No Data',
           radius: 50,
           titleStyle: const TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: Colors.grey,
           ),
         ),
       );
+      return sections;
     }
+    
+    // Create sections for each category with actual data
+    for (int i = 0; i < categories.length; i++) {
+      final categoryExpenses = await provider.getTotalExpensesByCategory(categories[i], dateRange['start']!, dateRange['end']!);
+      if (categoryExpenses > 0) {
+        final percentage = (categoryExpenses / totalExpenses) * 100;
+        sections.add(
+          PieChartSectionData(
+            color: colors[i],
+            value: percentage,
+            title: '${percentage.toStringAsFixed(0)}%',
+            radius: 50,
+            titleStyle: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+        );
+      }
+    }
+    
     return sections;
   }
 
   Future<List<BarChartGroupData>> _getIncomeVsExpenseData(AppProvider provider) async {
     final groups = <BarChartGroupData>[];
-    for (int i = 0; i < 7; i++) {
+    
+    // Get data for the last 7 days
+    for (int i = 6; i >= 0; i--) {
+      final date = DateTime.now().subtract(Duration(days: i));
+      final startOfDay = DateTime(date.year, date.month, date.day);
+      final endOfDay = startOfDay.add(const Duration(days: 1));
+      
+      final income = await provider.getTotalIncome(startOfDay, endOfDay);
+      final expenses = await provider.getTotalExpenses(startOfDay, endOfDay);
+      
       groups.add(
         BarChartGroupData(
-          x: i,
+          x: 6 - i,
           barRods: [
             BarChartRodData(
-              toY: 200 + (i * 50),
+              toY: income,
               color: const Color(0xFF00B894),
               width: 8,
             ),
             BarChartRodData(
-              toY: 150 + (i * 30),
+              toY: expenses,
               color: const Color(0xFFE17055),
               width: 8,
             ),
