@@ -31,6 +31,11 @@ class AppProvider with ChangeNotifier {
       _budgets = await _databaseHelper.getBudgets();
     } catch (e) {
       debugPrint('Error loading data: $e');
+      // Initialize with empty lists if there's an error
+      _accounts = [];
+      _transactions = [];
+      _categories = [];
+      _budgets = [];
     }
 
     _isLoading = false;
