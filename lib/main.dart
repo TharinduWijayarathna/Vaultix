@@ -26,11 +26,17 @@ class VaultixApp extends StatelessWidget {
             brightness: Brightness.light,
           ),
           fontFamily: 'SF Pro Display', // iOS-inspired font
+          scaffoldBackgroundColor: const Color(0xFFF8F9FA),
           appBarTheme: const AppBarTheme(
             backgroundColor: Color(0xFF6C5CE7),
             foregroundColor: Colors.white,
             elevation: 0,
             centerTitle: true,
+            titleTextStyle: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
           ),
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
@@ -40,6 +46,7 @@ class VaultixApp extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
               ),
               elevation: 0,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
             ),
           ),
           inputDecorationTheme: InputDecorationTheme(
@@ -48,10 +55,14 @@ class VaultixApp extends StatelessWidget {
               borderSide: BorderSide.none,
             ),
             filled: true,
-            fillColor: Colors.grey[100],
+            fillColor: Colors.white,
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 20,
               vertical: 16,
+            ),
+            hintStyle: TextStyle(
+              color: Colors.grey[500],
+              fontSize: 16,
             ),
           ),
           cardTheme: CardTheme(
@@ -60,6 +71,36 @@ class VaultixApp extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
             ),
             color: Colors.white,
+            shadowColor: Colors.black.withOpacity(0.05),
+          ),
+          textTheme: const TextTheme(
+            headlineLarge: TextStyle(
+              fontSize: 32,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF2D3436),
+            ),
+            headlineMedium: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF2D3436),
+            ),
+            headlineSmall: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF2D3436),
+            ),
+            bodyLarge: TextStyle(
+              fontSize: 16,
+              color: Color(0xFF2D3436),
+            ),
+            bodyMedium: TextStyle(
+              fontSize: 14,
+              color: Color(0xFF2D3436),
+            ),
+            bodySmall: TextStyle(
+              fontSize: 12,
+              color: Color(0xFF636E72),
+            ),
           ),
         ),
         home: const MainScreen(),

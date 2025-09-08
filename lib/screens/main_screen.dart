@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/app_provider.dart';
+import '../utils/sample_data.dart';
 import 'home_screen.dart';
 import 'spend_screen.dart';
 import 'reports_screen.dart';
@@ -26,7 +27,9 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // Load sample data on first launch
+      await SampleData.seedSampleData();
       context.read<AppProvider>().loadData();
     });
   }
