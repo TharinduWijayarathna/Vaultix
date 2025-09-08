@@ -4,6 +4,7 @@ import '../models/account.dart';
 import '../models/transaction.dart' as app_transaction;
 import '../models/category.dart';
 import '../models/budget.dart';
+import '../models/savings_goal.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
@@ -22,8 +23,9 @@ class DatabaseHelper {
     String path = join(await getDatabasesPath(), 'vaultix.db');
     return await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: _onCreate,
+      onUpgrade: _onUpgrade,
     );
   }
 
@@ -75,8 +77,40 @@ class DatabaseHelper {
       )
     ''');
 
+    // Create savings_goals table
+    await db.execute('''
+      CREATE TABLE savings_goals(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        description TEXT NOT NULL,
+        targetAmount REAL NOT NULL,
+        currentAmount REAL NOT NULL,
+        targetDate INTEGER NOT NULL,
+        createdDate INTEGER NOT NULL,
+        category TEXT NOT NULL
+      )
+    ''');
+
     // Insert default categories
     await _insertDefaultCategories(db);
+  }
+
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      // Create savings_goals table for version 2
+      await db.execute('''
+        CREATE TABLE savings_goals(
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          name TEXT NOT NULL,
+          description TEXT NOT NULL,
+          targetAmount REAL NOT NULL,
+          currentAmount REAL NOT NULL,
+          targetDate INTEGER NOT NULL,
+          createdDate INTEGER NOT NULL,
+          category TEXT NOT NULL
+        )
+      ''');
+    }
   }
 
   Future<void> _insertDefaultCategories(Database db) async {
@@ -244,5 +278,36 @@ class DatabaseHelper {
       ['expense', start.millisecondsSinceEpoch, end.millisecondsSinceEpoch],
     );
     return result.first['total'] as double? ?? 0.0;
+  }
+
+  // Savings Goals CRUD operations
+  Future<int> insertSavingsGoal(SavingsGoal goal) async {
+    final db = await database;
+    return await db.insert('savings_goals', goal.toMap());
+  }
+
+  Future<List<SavingsGoal>> getSavingsGoals() async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query('savings_goals');
+    return List.generate(maps.length, (i) => SavingsGoal.fromMap(maps[i]));
+  }
+
+  Future<int> updateSavingsGoal(SavingsGoal goal) async {
+    final db = await database;
+    return await db.update(
+      'savings_goals',
+      goal.toMap(),
+      where: 'id = ?',
+      whereArgs: [goal.id],
+    );
+  }
+
+  Future<int> deleteSavingsGoal(int id) async {
+    final db = await database;
+    return await db.delete(
+      'savings_goals',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
   }
 }

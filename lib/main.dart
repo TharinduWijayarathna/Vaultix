@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'providers/app_provider.dart';
+import 'providers/currency_provider.dart';
 import 'screens/main_screen.dart';
 import 'screens/add_account_screen.dart';
 
@@ -13,8 +14,11 @@ class VaultixApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => AppProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => AppProvider()),
+        ChangeNotifierProvider(create: (context) => CurrencyProvider()),
+      ],
       child: MaterialApp(
         title: 'Vaultix - Money Management',
         debugShowCheckedModeBanner: false,

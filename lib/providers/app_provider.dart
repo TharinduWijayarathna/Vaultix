@@ -3,6 +3,7 @@ import '../models/account.dart';
 import '../models/transaction.dart';
 import '../models/category.dart';
 import '../models/budget.dart';
+import '../models/savings_goal.dart';
 import '../database/database_helper.dart';
 
 class AppProvider with ChangeNotifier {
@@ -12,12 +13,14 @@ class AppProvider with ChangeNotifier {
   List<Transaction> _transactions = [];
   List<Category> _categories = [];
   List<Budget> _budgets = [];
+  List<SavingsGoal> _savingsGoals = [];
   bool _isLoading = false;
 
   List<Account> get accounts => _accounts;
   List<Transaction> get transactions => _transactions;
   List<Category> get categories => _categories;
   List<Budget> get budgets => _budgets;
+  List<SavingsGoal> get savingsGoals => _savingsGoals;
   bool get isLoading => _isLoading;
 
   Future<void> loadData() async {
@@ -29,6 +32,7 @@ class AppProvider with ChangeNotifier {
       _transactions = await _databaseHelper.getTransactions();
       _categories = await _databaseHelper.getCategories();
       _budgets = await _databaseHelper.getBudgets();
+      _savingsGoals = await _databaseHelper.getSavingsGoals();
     } catch (e) {
       debugPrint('Error loading data: $e');
       // Initialize with empty lists if there's an error
@@ -36,6 +40,7 @@ class AppProvider with ChangeNotifier {
       _transactions = [];
       _categories = [];
       _budgets = [];
+      _savingsGoals = [];
     }
 
     _isLoading = false;
@@ -203,5 +208,33 @@ class AppProvider with ChangeNotifier {
     final sortedTransactions = List<Transaction>.from(_transactions);
     sortedTransactions.sort((a, b) => b.date.compareTo(a.date));
     return sortedTransactions.take(limit).toList();
+  }
+
+  // Savings Goals operations
+  Future<void> addSavingsGoal(SavingsGoal goal) async {
+    try {
+      await _databaseHelper.insertSavingsGoal(goal);
+      await loadData(); // Reload data after adding
+    } catch (e) {
+      debugPrint('Error adding savings goal: $e');
+    }
+  }
+
+  Future<void> updateSavingsGoal(SavingsGoal goal) async {
+    try {
+      await _databaseHelper.updateSavingsGoal(goal);
+      await loadData(); // Reload data after updating
+    } catch (e) {
+      debugPrint('Error updating savings goal: $e');
+    }
+  }
+
+  Future<void> deleteSavingsGoal(int id) async {
+    try {
+      await _databaseHelper.deleteSavingsGoal(id);
+      await loadData(); // Reload data after deleting
+    } catch (e) {
+      debugPrint('Error deleting savings goal: $e');
+    }
   }
 }

@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../providers/app_provider.dart';
+import '../providers/currency_provider.dart';
 import '../models/account.dart';
 import '../widgets/account_card.dart';
 import '../widgets/transaction_list_item.dart';
+import '../widgets/currency_selector.dart';
 import '../components/ui/card.dart' as ui;
 import '../components/ui/button.dart' as ui;
 import '../components/ui/badge.dart' as ui;
@@ -45,9 +47,7 @@ class HomeScreen extends StatelessWidget {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (context) => const AddAccountScreen(),
-            ),
+            MaterialPageRoute(builder: (context) => const AddAccountScreen()),
           );
         },
         backgroundColor: const Color(0xFF0F172A),
@@ -71,10 +71,7 @@ class HomeScreen extends StatelessWidget {
           decoration: const BoxDecoration(
             color: Color(0xFFFFFFFF),
             border: Border(
-              bottom: BorderSide(
-                color: Color(0xFFE2E8F0),
-                width: 1,
-              ),
+              bottom: BorderSide(color: Color(0xFFE2E8F0), width: 1),
             ),
           ),
           child: SafeArea(
@@ -111,17 +108,23 @@ class HomeScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFF1F5F9),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: const Icon(
-                          Icons.notifications_outlined,
-                          color: Color(0xFF64748B),
-                          size: 20,
-                        ),
+                      Row(
+                        children: [
+                          const CurrencySelector(),
+                          const SizedBox(width: 8),
+                          Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFF1F5F9),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: const Icon(
+                              Icons.notifications_outlined,
+                              color: Color(0xFF64748B),
+                              size: 20,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -136,112 +139,121 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildTotalBalanceCard(AppProvider provider) {
     return SliverToBoxAdapter(
-      child: FutureBuilder<double>(
-        future: provider.getTotalBalance(),
-        builder: (context, snapshot) {
-          final totalBalance = snapshot.data ?? 0.0;
-          return Padding(
-            padding: const EdgeInsets.all(16),
-            child: ui.Card(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Consumer<CurrencyProvider>(
+        builder: (context, currencyProvider, child) {
+          return FutureBuilder<double>(
+            future: provider.getTotalBalance(),
+            builder: (context, snapshot) {
+              final totalBalance = snapshot.data ?? 0.0;
+              return Padding(
+                padding: const EdgeInsets.all(16),
+                child: ui.Card(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Total Balance',
-                        style: TextStyle(
-                          color: Color(0xFF64748B),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Total Balance',
+                            style: TextStyle(
+                              color: Color(0xFF64748B),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              letterSpacing: -0.025,
+                            ),
+                          ),
+                          ui.Badge(
+                            variant: ui.BadgeVariant.secondary,
+                            child: Text('${provider.accounts.length} accounts'),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        currencyProvider.formatAmount(totalBalance),
+                        style: const TextStyle(
+                          color: Color(0xFF0F172A),
+                          fontSize: 32,
+                          fontWeight: FontWeight.w700,
                           letterSpacing: -0.025,
                         ),
                       ),
-                      ui.Badge(
-                        variant: ui.BadgeVariant.secondary,
-                        child: Text('${provider.accounts.length} accounts'),
+                      const SizedBox(height: 24),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: FutureBuilder<double>(
+                              future: provider.getTotalIncome(
+                                DateTime.now().subtract(
+                                  const Duration(days: 30),
+                                ),
+                                DateTime.now(),
+                              ),
+                              builder: (context, snapshot) {
+                                return _buildStatCard(
+                                  'Income',
+                                  snapshot.data ?? 0.0,
+                                  Icons.trending_up,
+                                  const Color(0xFF10B981),
+                                  currencyProvider,
+                                );
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: FutureBuilder<double>(
+                              future: provider.getTotalExpenses(
+                                DateTime.now().subtract(
+                                  const Duration(days: 30),
+                                ),
+                                DateTime.now(),
+                              ),
+                              builder: (context, snapshot) {
+                                return _buildStatCard(
+                                  'Expenses',
+                                  snapshot.data ?? 0.0,
+                                  Icons.trending_down,
+                                  const Color(0xFFEF4444),
+                                  currencyProvider,
+                                );
+                              },
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  const SizedBox(height: 12),
-                  Text(
-                    NumberFormat.currency(symbol: '\$').format(totalBalance),
-                    style: const TextStyle(
-                      color: Color(0xFF0F172A),
-                      fontSize: 32,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: -0.025,
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: FutureBuilder<double>(
-                          future: provider.getTotalIncome(
-                            DateTime.now().subtract(const Duration(days: 30)),
-                            DateTime.now(),
-                          ),
-                          builder: (context, snapshot) {
-                            return _buildStatCard(
-                              'Income',
-                              snapshot.data ?? 0.0,
-                              Icons.trending_up,
-                              const Color(0xFF10B981),
-                            );
-                          },
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: FutureBuilder<double>(
-                          future: provider.getTotalExpenses(
-                            DateTime.now().subtract(const Duration(days: 30)),
-                            DateTime.now(),
-                          ),
-                          builder: (context, snapshot) {
-                            return _buildStatCard(
-                              'Expenses',
-                              snapshot.data ?? 0.0,
-                              Icons.trending_down,
-                              const Color(0xFFEF4444),
-                            );
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+                ),
+              );
+            },
           );
         },
       ),
     );
   }
 
-  Widget _buildStatCard(String label, double amount, IconData icon, Color color) {
+  Widget _buildStatCard(
+    String label,
+    double amount,
+    IconData icon,
+    Color color,
+    CurrencyProvider currencyProvider,
+  ) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: color.withOpacity(0.05),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: color.withOpacity(0.2),
-          width: 1,
-        ),
+        border: Border.all(color: color.withOpacity(0.2), width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(
-                icon,
-                color: color,
-                size: 16,
-              ),
+              Icon(icon, color: color, size: 16),
               const SizedBox(width: 8),
               Text(
                 label,
@@ -256,7 +268,7 @@ class HomeScreen extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            NumberFormat.currency(symbol: '\$').format(amount),
+            currencyProvider.formatAmount(amount),
             style: const TextStyle(
               color: Color(0xFF0F172A),
               fontSize: 18,
@@ -372,9 +384,12 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildRecentTransactionsSection(BuildContext context, AppProvider provider) {
+  Widget _buildRecentTransactionsSection(
+    BuildContext context,
+    AppProvider provider,
+  ) {
     final recentTransactions = provider.getRecentTransactions(limit: 5);
-    
+
     return SliverToBoxAdapter(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -401,10 +416,7 @@ class HomeScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: const Color(0xFFFFFFFF),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: const Color(0xFFE2E8F0),
-                    width: 1,
-                  ),
+                  border: Border.all(color: const Color(0xFFE2E8F0), width: 1),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.05),
@@ -452,7 +464,9 @@ class HomeScreen extends StatelessWidget {
                 itemCount: recentTransactions.length,
                 itemBuilder: (context, index) {
                   final transaction = recentTransactions[index];
-                  final account = provider.getAccountById(transaction.accountId);
+                  final account = provider.getAccountById(
+                    transaction.accountId,
+                  );
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 12),
                     child: TransactionListItem(

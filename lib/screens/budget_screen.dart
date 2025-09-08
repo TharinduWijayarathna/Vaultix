@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../providers/app_provider.dart';
+import '../providers/currency_provider.dart';
 import '../models/budget.dart';
+import '../models/savings_goal.dart';
+import '../widgets/savings_goal_card.dart';
+import '../components/ui/button.dart' as ui;
+import 'add_savings_goal_screen.dart';
 
 class BudgetScreen extends StatefulWidget {
   const BudgetScreen({super.key});
@@ -51,7 +56,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildSavingsGoalCard(),
+                _buildSavingsGoalsSection(provider),
                 const SizedBox(height: 24),
                 _buildMonthlyBudgetCard(),
                 const SizedBox(height: 24),
@@ -67,152 +72,112 @@ class _BudgetScreenState extends State<BudgetScreen> {
     );
   }
 
-  Widget _buildSavingsGoalCard() {
-    return FutureBuilder<Map<String, double>>(
-      future: _getSavingsGoalData(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Container(
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFF10B981), Color(0xFF059669)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+  Widget _buildSavingsGoalsSection(AppProvider provider) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              'Savings Goals',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF0F172A),
+                letterSpacing: -0.025,
               ),
-              borderRadius: BorderRadius.circular(20),
+            ),
+            ui.Button(
+              variant: ui.ButtonVariant.outline,
+              size: ui.ButtonSize.sm,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AddSavingsGoalScreen(),
+                  ),
+                );
+              },
+              child: const Text('Add Goal'),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        if (provider.savingsGoals.isEmpty)
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(32),
+            decoration: BoxDecoration(
+              color: const Color(0xFFFFFFFF),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: const Color(0xFFE2E8F0),
+                width: 1,
+              ),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFF10B981).withOpacity(0.3),
-                  blurRadius: 15,
-                  offset: const Offset(0, 8),
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
                 ),
               ],
             ),
-            child: const Center(
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-              ),
-            ),
-          );
-        }
-
-        final data = snapshot.data!;
-        final target = data['target'] ?? 2500.0;
-        final saved = data['saved'] ?? 0.0;
-        final progress = target > 0 ? saved / target : 0.0;
-
-        return Container(
-          padding: const EdgeInsets.all(24),
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [Color(0xFF10B981), Color(0xFF059669)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: const Color(0xFF10B981).withOpacity(0.3),
-                blurRadius: 15,
-                offset: const Offset(0, 8),
-              ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Row(
-                children: [
-                  Icon(Icons.savings, color: Colors.white, size: 28),
-                  SizedBox(width: 12),
-                  Text(
-                    'Savings Goal',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                'Monthly Target',
-                style: TextStyle(
-                  color: Colors.white70,
-                  fontSize: 14,
+            child: Column(
+              children: [
+                Icon(
+                  Icons.savings_outlined,
+                  size: 48,
+                  color: const Color(0xFF64748B),
                 ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                NumberFormat.currency(symbol: '\$').format(target),
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
+                const SizedBox(height: 16),
+                const Text(
+                  'No savings goals yet',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF0F172A),
+                    letterSpacing: -0.025,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Progress',
-                          style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 12,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        LinearProgressIndicator(
-                          value: progress.clamp(0.0, 1.0),
-                          backgroundColor: Colors.white.withOpacity(0.3),
-                          valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          '${(progress * 100).toStringAsFixed(0)}%',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
+                const SizedBox(height: 8),
+                const Text(
+                  'Create your first savings goal to start building wealth',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Color(0xFF64748B),
+                    letterSpacing: -0.025,
                   ),
-                  const SizedBox(width: 20),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      const Text(
-                        'Saved',
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 12,
-                        ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 24),
+                ui.Button(
+                  isFullWidth: true,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const AddSavingsGoalScreen(),
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        NumberFormat.currency(symbol: '\$').format(saved),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
+                    );
+                  },
+                  child: const Text('Create Goal'),
+                ),
+              ],
+            ),
+          )
+        else
+          Column(
+            children: provider.savingsGoals.map((goal) {
+              return SavingsGoalCard(
+                goal: goal,
+                onDelete: () {
+                  _showDeleteConfirmation(goal);
+                },
+              );
+            }).toList(),
           ),
-        );
-      },
+      ],
     );
   }
 
@@ -613,6 +578,39 @@ class _BudgetScreenState extends State<BudgetScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  void _showDeleteConfirmation(SavingsGoal goal) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Delete Savings Goal'),
+          content: Text('Are you sure you want to delete "${goal.name}"?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                context.read<AppProvider>().deleteSavingsGoal(goal.id);
+                Navigator.of(context).pop();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Savings goal deleted successfully!'),
+                    backgroundColor: Color(0xFF10B981),
+                  ),
+                );
+              },
+              child: const Text('Delete'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

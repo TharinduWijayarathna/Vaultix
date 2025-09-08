@@ -1,5 +1,6 @@
 import '../models/account.dart';
 import '../models/transaction.dart';
+import '../models/savings_goal.dart';
 import '../database/database_helper.dart';
 
 class SampleData {
@@ -92,6 +93,44 @@ class SampleData {
 
     for (final transaction in sampleTransactions) {
       await dbHelper.insertTransaction(transaction);
+    }
+
+    // Create sample savings goals
+    final sampleSavingsGoals = [
+      SavingsGoal(
+        id: 0,
+        name: 'Emergency Fund',
+        description: 'Build a 6-month emergency fund for unexpected expenses',
+        targetAmount: 10000.00,
+        currentAmount: 5000.00,
+        targetDate: DateTime.now().add(const Duration(days: 365)),
+        createdDate: DateTime.now().subtract(const Duration(days: 30)),
+        category: 'Emergency Fund',
+      ),
+      SavingsGoal(
+        id: 0,
+        name: 'Vacation to Europe',
+        description: 'Save for a dream vacation to Europe next summer',
+        targetAmount: 5000.00,
+        currentAmount: 1200.00,
+        targetDate: DateTime.now().add(const Duration(days: 180)),
+        createdDate: DateTime.now().subtract(const Duration(days: 15)),
+        category: 'Vacation',
+      ),
+      SavingsGoal(
+        id: 0,
+        name: 'New Car',
+        description: 'Save for a down payment on a new car',
+        targetAmount: 8000.00,
+        currentAmount: 2500.00,
+        targetDate: DateTime.now().add(const Duration(days: 450)),
+        createdDate: DateTime.now().subtract(const Duration(days: 45)),
+        category: 'Car',
+      ),
+    ];
+
+    for (final goal in sampleSavingsGoals) {
+      await dbHelper.insertSavingsGoal(goal);
     }
   }
 }

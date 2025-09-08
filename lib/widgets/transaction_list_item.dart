@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../models/transaction.dart';
+import '../providers/currency_provider.dart';
 
 class TransactionListItem extends StatelessWidget {
   final Transaction transaction;
@@ -14,6 +16,7 @@ class TransactionListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currencyProvider = Provider.of<CurrencyProvider>(context);
     final isIncome = transaction.type == 'income';
     final isExpense = transaction.type == 'expense';
     
@@ -80,7 +83,7 @@ class TransactionListItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                '${isIncome ? '+' : isExpense ? '-' : ''}${NumberFormat.currency(symbol: '\$').format(transaction.amount)}',
+                '${isIncome ? '+' : isExpense ? '-' : ''}${currencyProvider.formatAmount(transaction.amount)}',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,

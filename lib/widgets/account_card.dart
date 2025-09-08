@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../models/account.dart';
+import '../providers/currency_provider.dart';
 
 class AccountCard extends StatelessWidget {
   final Account account;
@@ -12,6 +14,8 @@ class AccountCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currencyProvider = Provider.of<CurrencyProvider>(context);
+    
     return Container(
       width: double.infinity,
       height: 160,
@@ -76,7 +80,7 @@ class AccountCard extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            NumberFormat.currency(symbol: '\$').format(account.balance),
+            currencyProvider.formatAmount(account.balance),
             style: const TextStyle(
               color: Color(0xFF0F172A),
               fontSize: 22,
