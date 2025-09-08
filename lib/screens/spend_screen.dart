@@ -4,6 +4,9 @@ import 'package:intl/intl.dart';
 import '../providers/app_provider.dart';
 import '../models/account.dart';
 import '../models/transaction.dart';
+import '../components/ui/card.dart';
+import '../components/ui/button.dart';
+import '../components/ui/input.dart';
 
 class SpendScreen extends StatefulWidget {
   const SpendScreen({super.key});
@@ -167,31 +170,33 @@ class _SpendScreenState extends State<SpendScreen> {
   }
 
   Widget _buildTransactionTypeSelector() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Transaction Type',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: Color(0xFF0F172A),
-            letterSpacing: -0.025,
+    return Card(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Transaction Type',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFF0F172A),
+              letterSpacing: -0.025,
+            ),
           ),
-        ),
-        const SizedBox(height: 16),
-        Row(
-          children: [
-            Expanded(
-              child: _buildTypeButton('expense', 'Expense', Icons.remove_circle_outline),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: _buildTypeButton('income', 'Income', Icons.add_circle_outline),
-            ),
-          ],
-        ),
-      ],
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: _buildTypeButton('expense', 'Expense', Icons.remove_circle_outline),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _buildTypeButton('income', 'Income', Icons.add_circle_outline),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -206,7 +211,7 @@ class _SpendScreenState extends State<SpendScreen> {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF0F172A) : const Color(0xFFFFFFFF),
+          color: isSelected ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
             color: isSelected ? const Color(0xFF0F172A) : const Color(0xFFE2E8F0),
@@ -218,7 +223,7 @@ class _SpendScreenState extends State<SpendScreen> {
             Icon(
               icon,
               color: isSelected ? const Color(0xFFFFFFFF) : const Color(0xFF64748B),
-              size: 24,
+              size: 20,
             ),
             const SizedBox(height: 8),
             Text(
@@ -237,62 +242,32 @@ class _SpendScreenState extends State<SpendScreen> {
   }
 
   Widget _buildAccountSelector(AppProvider provider) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Select Account',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: Color(0xFF0F172A),
-            letterSpacing: -0.025,
-          ),
-        ),
-        const SizedBox(height: 12),
-        Container(
-          decoration: BoxDecoration(
-            color: const Color(0xFFFFFFFF),
-            borderRadius: BorderRadius.circular(8),
-            border: const Border(
-              top: BorderSide(color: Color(0xFFE2E8F0)),
-              left: BorderSide(color: Color(0xFFE2E8F0)),
-              right: BorderSide(color: Color(0xFFE2E8F0)),
-              bottom: BorderSide(color: Color(0xFFE2E8F0)),
+    return Select<Account>(
+      label: 'Select Account',
+      value: _selectedAccount,
+      hintText: 'Choose an account',
+      items: provider.accounts.map((account) {
+        return DropdownMenuItem<Account>(
+          value: account,
+          child: Text(
+            '${account.name} (${NumberFormat.currency(symbol: '\$').format(account.balance)})',
+            style: const TextStyle(
+              fontWeight: FontWeight.w500,
             ),
           ),
-          child: DropdownButtonFormField<Account>(
-            value: _selectedAccount,
-            decoration: const InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.all(20),
-            ),
-            hint: const Text('Choose an account'),
-            items: provider.accounts.map((account) {
-              return DropdownMenuItem<Account>(
-                value: account,
-                child: Text(
-                  '${account.name} (${NumberFormat.currency(symbol: '\$').format(account.balance)})',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              );
-            }).toList(),
-            onChanged: (Account? account) {
-              setState(() {
-                _selectedAccount = account;
-              });
-            },
-            validator: (value) {
-              if (value == null) {
-                return 'Please select an account';
-              }
-              return null;
-            },
-          ),
-        ),
-      ],
+        );
+      }).toList(),
+      onChanged: (Account? account) {
+        setState(() {
+          _selectedAccount = account;
+        });
+      },
+      validator: (value) {
+        if (value == null) {
+          return 'Please select an account';
+        }
+        return null;
+      },
     );
   }
 
